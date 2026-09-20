@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>For Hiba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ───── CSS Custom Properties ───── */
+:root {
+  --bg: #FFF8F5;
+  --bg-card: #FFFFFF;
+  --text: #3E2040;
+  --text-soft: #6B4A6E;
+  --blush: #F4C2C2;
+  --rose: #E8A0BF;
+  --rose-deep: #C7739A;
+  --cream: #FFF0E8;
+  --gold: #D4A853;
+  --gold-soft: #E8CA8A;
+  --plum: #3E2040;
+  --shadow: rgba(62, 32, 64, 0.08);
+  --shadow-md: rgba(62, 32, 64, 0.12);
+  --border: rgba(228, 160, 191, 0.3);
+  --focus: #C7739A;
+  --particle-opacity: 0.18;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Quicksand', 'Nunito', sans-serif;
+  --transition-scene: 0.6s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1A0E1C;
+    --bg-card: #2A1A2E;
+    --text: #F5E6F0;
+    --text-soft: #C8A8CC;
+    --blush: #5C3A4A;
+    --rose: #8B4A6B;
+    --rose-deep: #A85E80;
+    --cream: #2E1C2A;
+    --gold: #D4A853;
+    --gold-soft: #B89040;
+    --plum: #F5E6F0;
+    --shadow: rgba(0, 0, 0, 0.25);
+    --shadow-md: rgba(0, 0, 0, 0.35);
+    --border: rgba(139, 74, 107, 0.35);
+    --focus: #D4A853;
+    --particle-opacity: 0.12;
+  }
+}
+
+/* ───── Reset & Base ───── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  position: relative;
+}
+
+/* ───── Particle Canvas ───── */
+#particles {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ───── Scene Container ───── */
+.scene {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 2rem 1.25rem;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity var(--transition-scene), transform var(--transition-scene);
+}
+
+.scene.active {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ───── Typography ───── */
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--plum);
+}
+
+h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); margin-bottom: 1.5rem; text-align: center; }
+h2 { font-size: clamp(1.3rem, 4vw, 1.8rem); margin-bottom: 1rem; text-align: center; }
+
+p, .body-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--text-soft);
+}
+
+/* ───── Card ───── */
+.card {
+  background: var(--bg-card);
+  border-radius: 1.25rem;
+  padding: 2rem 1.75rem;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 4px 24px var(--shadow), 0 1px 4px var(--shadow);
+  border: 1px solid var(--border);
+}
+
+/* ───── Buttons ───── */
+.btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  color: #fff;
+  box-shadow: 0 3px 14px rgba(199, 115, 154, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 20px rgba(199, 115, 154, 0.4);
+}
+
+.btn-secondary {
+  background: var(--cream);
+  color: var(--text);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--blush);
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:hover { transform: none; }
+}
+
+/* ───── Scene 1: Apology ───── */
+#scene1 .headline-typed {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 600;
+  color: var(--plum);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  min-height: 2.5rem;
+}
+
+#scene1 .headline-typed .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--gold);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #scene1 .headline-typed .cursor { animation: none; opacity: 1; }
+}
+
+.letter {
+  text-align: left;
+  margin-bottom: 1.75rem;
+}
+
+.letter p {
+  margin-bottom: 1rem;
+}
+
+.letter .sign-off {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--rose-deep);
+  margin-top: 1.5rem;
+}
+
+#scene1 .btn-wrap { text-align: center; margin-top: 1.5rem; }
+
+/* ───── Scene 2: Gentle Ask ───── */
+#scene2 .sub-line {
+  text-align: center;
+  max-width: 460px;
+  margin: 0 auto 2rem;
+}
+
+#scene2 .btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+#patience-msg {
+  text-align: center;
+  max-width: 440px;
+  margin: 2rem auto 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#patience-msg.visible { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  #patience-msg { transition: none; }
+}
+
+/* ───── Scene 3: Warmth + Cat ───── */
+.cat-container {
+  position: relative;
+  width: 140px;
+  height: 160px;
+  margin: 0 auto 1.5rem;
+}
+
+/* CSS Cat */
+.cat {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: cat-sway 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat, .cat-ear-l, .cat-ear-r, .cat-tail, .cat-paw-l, .cat-paw-r, .music-note { animation: none !important; }
+}
+
+@keyframes cat-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.cat-body {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 70px;
+  background: var(--gold-soft);
+  border-radius: 40px 40px 20px 20px;
+}
+
+.cat-head {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 64px;
+  background: var(--gold-soft);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.cat-ear-l, .cat-ear-r {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 24px solid var(--gold-soft);
+  z-index: 3;
+}
+
+.cat-ear-l { left: 18px; transform: rotate(-10deg); }
+.cat-ear-r { right: 18px; transform: rotate(10deg); }
+
+.cat-ear-inner-l, .cat-ear-inner-r {
+  position: absolute;
+  top: 3px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 15px solid var(--rose);
+  z-index: 4;
+}
+
+.cat-ear-inner-l { left: 24px; transform: rotate(-10deg); }
+.cat-ear-inner-r { right: 24px; transform: rotate(10deg); }
+
+.cat-eye {
+  position: absolute;
+  top: 30px;
+  width: 8px;
+  height: 10px;
+  background: var(--plum);
+  border-radius: 50%;
+  z-index: 5;
+}
+
+.cat-eye.left { left: 38px; }
+.cat-eye.right { right: 38px; }
+
+.cat-nose {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 5px;
+  background: var(--rose-deep);
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  z-index: 5;
+}
+
+.cat-mouth {
+  position: absolute;
+  top: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 6px;
+  z-index: 5;
+}
+
+.cat-mouth::before, .cat-mouth::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 6px;
+  border-bottom: 2px solid var(--rose-deep);
+  border-radius: 0 0 50% 50%;
+}
+
+.cat-mouth::before { left: 0; }
+.cat-mouth::after { right: 0; }
+
+.cat-blush {
+  position: absolute;
+  top: 38px;
+  width: 14px;
+  height: 8px;
+  background: var(--blush);
+  border-radius: 50%;
+  opacity: 0.7;
+  z-index: 5;
+}
+
+.cat-blush.left { left: 24px; }
+.cat-blush.right { right: 24px; }
+
+.cat-whisker {
+  position: absolute;
+  top: 42px;
+  width: 20px;
+  height: 1.5px;
+  background: var(--text-soft);
+  opacity: 0.4;
+  z-index: 5;
+}
+
+.cat-whisker.l1 { left: 8px; transform: rotate(-8deg); }
+.cat-whisker.l2 { left: 6px; top: 46px; transform: rotate(5deg); }
+.cat-whisker.r1 { right: 8px; transform: rotate(8deg); }
+.cat-whisker.r2 { right: 6px; top: 46px; transform: rotate(-5deg); }
+
+.cat-tail {
+  position: absolute;
+  bottom: 10px;
+  right: 8px;
+  width: 40px;
+  height: 20px;
+  border: 4px solid var(--gold-soft);
+  border-color: var(--gold-soft) var(--gold-soft) transparent transparent;
+  border-radius: 0 20px 0 0;
+  z-index: 1;
+  transform-origin: left bottom;
+  animation: tail-wag 1.5s ease-in-out infinite;
+}
+
+@keyframes tail-wag {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(15deg); }
+}
+
+.cat-paw-l, .cat-paw-r {
+  position: absolute;
+  bottom: -6px;
+  width: 18px;
+  height: 14px;
+  background: var(--gold-soft);
+  border-radius: 50% 50% 40% 40%;
+  z-index: 2;
+  animation: paw-bounce 1.2s ease-in-out infinite;
+}
+
+.cat-paw-l { left: 28px; animation-delay: 0s; }
+.cat-paw-r { right: 28px; animation-delay: 0.6s; }
+
+@keyframes paw-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Music Notes */
+.music-notes {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  width: 40px;
+  height: 80px;
+  z-index: 6;
+}
+
+.music-note {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0;
+  animation: note-float 3s ease-in-out infinite;
+}
+
+.music-note:nth-child(1) { left: 5px; animation-delay: 0s; }
+.music-note:nth-child(2) { left: 20px; animation-delay: 1s; }
+.music-note:nth-child(3) { left: 10px; animation-delay: 2s; }
+
+@keyframes note-float {
+  0% { opacity: 0; transform: translateY(20px) rotate(0deg); }
+  30% { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-40px) rotate(15deg); }
+}
+
+#scene3 .body-text {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.15rem);
+}
+
+/* ───── Scene 4: Date Picker ───── */
+#scene4 .card { max-width: 480px; }
+
+#scene4 label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+#date-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#date-input:focus {
+  border-color: var(--focus);
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.option-card {
+  padding: 0.9rem 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  text-align: center;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+  outline: none;
+  user-select: none;
+}
+
+.option-card:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.option-card:hover {
+  border-color: var(--rose);
+  transform: translateY(-1px);
+}
+
+.option-card.selected {
+  border-color: var(--rose-deep);
+  background: linear-gradient(135deg, var(--blush), var(--cream));
+  color: var(--plum);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option-card { transition: none; }
+  .option-card:hover { transform: none; }
+}
+
+#scene4 .btn-wrap { text-align: center; }
+
+/* ───── Scene 5: Confirmation ───── */
+#scene5 .card {
+  text-align: center;
+  max-width: 460px;
+}
+
+#scene5 .plan-summary {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--rose-deep);
+  margin: 1.25rem 0;
+}
+
+#scene5 .date-display {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+/* Envelope */
+.envelope-btn {
+  position: fixed;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  right: 1.5rem;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 16px rgba(199, 115, 154, 0.35);
+  opacity: 0;
+  transition: opacity 0.6s ease, transform 0.2s ease;
+  z-index: 100;
+  outline: none;
+}
+
+.envelope-btn.visible {
+  opacity: 1;
+  animation: env-pulse 2.5s ease-in-out infinite;
+}
+
+.envelope-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.envelope-btn:hover {
+  transform: scale(1.08);
+}
+
+.envelope-btn .notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+
+@keyframes env-pulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(199, 115, 154, 0.35); }
+  50% { box-shadow: 0 4px 28px rgba(199, 115, 154, 0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope-btn { transition: none; animation: none !important; }
+  .envelope-btn:hover { transform: none; }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay { transition: none; }
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border-radius: 1.25rem;
+  padding: 2rem 1.75rem;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: 0 8px 40px var(--shadow-md);
+  border: 1px solid var(--border);
+  position: relative;
+  transform: translateY(10px);
+  transition: transform 0.35s ease;
+}
+
+.modal-overlay.open .modal-card {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-card { transition: none; transform: none; }
+}
+
+.modal-card .close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--cream);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft);
+  transition: background 0.2s;
+  outline: none;
+}
+
+.modal-card .close-btn:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.modal-card .close-btn:hover {
+  background: var(--blush);
+}
+
+.modal-card p {
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+}
+
+.modal-card .sign-off {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--rose-deep);
+  margin-top: 1rem;
+}
+
+/* ───── Confetti Canvas ───── */
+#confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ───── Responsive ───── */
+@media (max-width: 480px) {
+  .card { padding: 1.5rem 1.25rem; }
+  .option-grid { gap: 0.5rem; }
+  .option-card { padding: 0.75rem 0.5rem; font-size: 0.82rem; }
+  .btn { padding: 0.75rem 1.5rem; font-size: 0.95rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient particle canvas -->
+<canvas id="particles" aria-hidden="true"></canvas>
+
+<!-- Confetti canvas (scene 5) -->
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<!-- ═══════ Scene 1: The Apology ═══════ -->
+<section class="scene active" id="scene1" role="region" aria-label="Apology">
+  <div class="headline-typed" id="typed-headline" aria-live="polite"></div>
+  <div class="card letter" id="letter-card" style="opacity:0; transition: opacity 0.8s ease;">
+    <!-- ╔═══════════════════════════════════════════════════════════════╗
+         ║  PERSONALIZE THIS LETTER before sending.                     ║
+         ║  A real apology names the specific thing — not just           ║
+         ║  the feeling. Replace the bracketed parts with what           ║
+         ║  actually happened.                                          ║
+         ╚═══════════════════════════════════════════════════════════════╝ -->
+    <p>Hiba,</p>
+    <p>I've been thinking a lot about what happened between us, and I need you to know — I'm not here to make excuses or to explain it away.</p>
+    <p>I was mean to you. There's no softer way to put it, and I'm not going to try to find one. The way I spoke to you, the tone I used, the things I said — none of it was okay. You weren't asking for anything unreasonable, and instead of listening, I got defensive and I took it out on you. That's on me, not on you.</p>
+    <p>You didn't deserve that. You never do. And I hate that I'm the person who made you feel small or hurt in that moment, because that's the last thing you should ever feel — especially from me.</p>
+    <p>I'm sorry — genuinely — for the part I played in it. You deserved better from me in that moment, and I know that.</p>
+    <p>I miss you, Hiba. Not just the easy, comfortable parts — I miss <em>you</em>. Your honesty, the way you see things, the way you make everything feel more real just by being there.</p>
+    <p>I'm not asking you to forget it or rush past how you feel. Your feelings matter — they're not an inconvenience to me. I just wanted you to hear this, because you deserve to know that I see what I did, and it weighs on me.</p>
+    <p class="sign-off">— with love, and I mean it</p>
+  </div>
+  <div class="btn-wrap" id="scene1-btn-wrap" style="opacity:0; transition: opacity 0.6s ease;">
+    <button class="btn btn-primary" onclick="goToScene(2)">I want to make this right →</button>
+  </div>
+</section>
+
+<!-- ═══════ Scene 2: The Gentle Ask ═══════ -->
+<section class="scene" id="scene2" role="region" aria-label="Checking in">
+  <h1>Can we talk?</h1>
+  <p class="sub-line body-text">No pressure — whenever you're ready. Take whatever time you need. This isn't about rushing you back to okay.</p>
+  <div class="btn-group">
+    <button class="btn btn-primary" onclick="goToScene(3)">I'm ready</button>
+    <button class="btn btn-secondary" onclick="showPatience()">I need more time</button>
+  </div>
+  <div id="patience-msg" role="status">
+    <p class="body-text" style="font-weight:600; color:var(--rose-deep);">Okay. I'll be here whenever you're ready — truly, no rush.</p>
+    <p class="body-text" style="margin-top:0.5rem;">There's nothing more here to click, no tricks. Just take care of yourself, and if you ever want to come back to this page, it'll still be here.</p>
+  </div>
+</section>
+
+<!-- ═══════ Scene 3: Warmth ═══════ -->
+<section class="scene" id="scene3" role="region" aria-label="Thank you">
+  <div class="cat-container" aria-hidden="true">
+    <div class="cat">
+      <!-- Ears -->
+      <div class="cat-ear-l"></div>
+      <div class="cat-ear-r"></div>
+      <div class="cat-ear-inner-l"></div>
+      <div class="cat-ear-inner-r"></div>
+      <!-- Head -->
+      <div class="cat-head">
+        <div class="cat-eye left"></div>
+        <div class="cat-eye right"></div>
+        <div class="cat-nose"></div>
+        <div class="cat-mouth"></div>
+        <div class="cat-blush left"></div>
+        <div class="cat-blush right"></div>
+        <div class="cat-whisker l1"></div>
+        <div class="cat-whisker l2"></div>
+        <div class="cat-whisker r1"></div>
+        <div class="cat-whisker r2"></div>
+      </div>
+      <!-- Body -->
+      <div class="cat-body"></div>
+      <!-- Paws -->
+      <div class="cat-paw-l"></div>
+      <div class="cat-paw-r"></div>
+      <!-- Tail -->
+      <div class="cat-tail"></div>
+      <!-- Music Notes -->
+      <div class="music-notes">
+        <span class="music-note">♪</span>
+        <span class="music-note">♫</span>
+        <span class="music-note">♪</span>
+      </div>
+    </div>
+  </div>
+  <p class="body-text">Thank you for hearing me out, Hiba.<br>I love you.</p>
+  <div style="margin-top:1.5rem;">
+    <button class="btn btn-primary" onclick="goToScene(4)">Continue →</button>
+  </div>
+</section>
+
+<!-- ═══════ Scene 4: Plan the Meet ═══════ -->
+<section class="scene" id="scene4" role="region" aria-label="Planning">
+  <div class="card">
+    <h2>Let's find a time</h2>
+    <label for="date-input">What day works for you?</label>
+    <input type="date" id="date-input" onchange="checkScene4Ready()">
+
+    <p class="body-text" style="margin-bottom:0.75rem; font-weight:600;">What sounds comfortable?</p>
+    <div class="option-grid" role="radiogroup" aria-label="Activity choice">
+      <div class="option-card" tabindex="0" role="radio" aria-checked="false" data-value="Coffee & talk" onclick="selectOption(this)" onkeydown="optionKey(event,this)">☕ Coffee &amp; talk</div>
+      <div class="option-card" tabindex="0" role="radio" aria-checked="false" data-value="A quiet walk" onclick="selectOption(this)" onkeydown="optionKey(event,this)">🌿 A quiet walk</div>
+      <div class="option-card" tabindex="0" role="radio" aria-checked="false" data-value="Dinner, just us" onclick="selectOption(this)" onkeydown="optionKey(event,this)">🍽️ Dinner, just us</div>
+      <div class="option-card" tabindex="0" role="radio" aria-checked="false" data-value="Whatever you're comfortable with" onclick="selectOption(this)" onkeydown="optionKey(event,this)">💛 Whatever you're comfortable with</div>
+    </div>
+
+    <div class="btn-wrap">
+      <button class="btn btn-primary" id="set-day-btn" disabled onclick="goToScene(5)">Set the day</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ Scene 5: Confirmation ═══════ -->
+<section class="scene" id="scene5" role="region" aria-label="Confirmation">
+  <div class="card">
+    <h2>It's a date 💛</h2>
+    <div class="date-display" id="confirm-date"></div>
+    <div class="plan-summary" id="confirm-plan"></div>
+    <p class="body-text">I'll be there. Thank you, Hiba.</p>
+  </div>
+</section>
+
+<!-- Envelope button (scene 5) -->
+<button class="envelope-btn" id="envelope-btn" aria-label="Open a note from me" onclick="openModal()" onkeydown="envelopeKey(event)">
+  ✉️
+  <span class="notif-dot" aria-hidden="true"></span>
+</button>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="clickOverlay(event)" role="dialog" aria-modal="true" aria-label="A note from me">
+  <div class="modal-card">
+    <button class="close-btn" onclick="closeModal()" aria-label="Close note">&times;</button>
+    <!-- ╔═══════════════════════════════════════════════════════════════╗
+         ║  PERSONALIZE THIS NOTE before sending.                       ║
+         ║  Make it specific to your situation.                         ║
+         ╚═══════════════════════════════════════════════════════════════╝ -->
+    <p>I know an apology doesn't erase what happened. Words only go so far, and I understand if part of you is still hesitant.</p>
+    <p>I've been thinking about why I got like that — why I let frustration turn into cruelty instead of just… talking to you like someone I love. That's not who I want to be for you. And "I didn't mean it" isn't enough, because in that moment, I still chose to say it.</p>
+    <p>So here's what I'm actually committing to: when I feel that frustration building, I'm going to stop, tell you I need a minute, and come back when I can speak to you the way you deserve to be spoken to. No more letting my bad moments become your bad day.</p>
+    <p>I just want the chance to actually show you — not just tell you — that I hear you, and I'm willing to do better. Not because I'm afraid of losing you, but because you deserve someone who steps up, and I want to be that person.</p>
+    <p class="sign-off">— always, for real</p>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────
+   State
+   ───────────────────────────────────────────────── */
+let currentScene = 1;
+let chosenDate = '';
+let chosenPlan = '';
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ─────────────────────────────────────────────────
+   Scene Transitions
+   ───────────────────────────────────────────────── */
+function goToScene(n) {
+  const cur = document.getElementById('scene' + currentScene);
+  const next = document.getElementById('scene' + n);
+  if (!cur || !next) return;
+
+  // Fade out current
+  cur.style.opacity = '0';
+  cur.style.transform = 'scale(0.97)';
+
+  setTimeout(() => {
+    cur.classList.remove('active');
+    cur.style.display = 'none';
+
+    // Prepare next
+    next.style.opacity = '0';
+    next.style.transform = 'scale(0.97)';
+    next.classList.add('active');
+    next.style.display = 'flex';
+
+    // Trigger reflow
+    void next.offsetHeight;
+
+    // Fade in
+    next.style.opacity = '1';
+    next.style.transform = 'scale(1)';
+
+    currentScene = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Scene 5 specific
+    if (n === 5) {
+      populateConfirmation();
+      setTimeout(() => launchConfetti(), 200);
+      setTimeout(() => {
+        document.getElementById('envelope-btn').classList.add('visible');
+      }, 1200);
+    }
+  }, reducedMotion ? 0 : 400);
+}
+
+/* ─────────────────────────────────────────────────
+   Scene 1: Typewriter
+   ───────────────────────────────────────────────── */
+(function typewriter() {
+  const text = 'Hiba, I owe you this.';
+  const el = document.getElementById('typed-headline');
+  let i = 0;
+
+  if (reducedMotion) {
+    el.textContent = text;
+    showLetterAndButton();
+    return;
+  }
+
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  cursor.setAttribute('aria-hidden', 'true');
+  el.appendChild(cursor);
+
+  function tick() {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i]), cursor);
+      i++;
+      setTimeout(tick, 65);
+    } else {
+      setTimeout(() => { cursor.remove(); showLetterAndButton(); }, 500);
+    }
+  }
+
+  setTimeout(tick, 600);
+})();
+
+function showLetterAndButton() {
+  const card = document.getElementById('letter-card');
+  const btn = document.getElementById('scene1-btn-wrap');
+  card.style.opacity = '1';
+  setTimeout(() => { btn.style.opacity = '1'; }, reducedMotion ? 0 : 400);
+}
+
+/* ─────────────────────────────────────────────────
+   Scene 2: Patience
+   ───────────────────────────────────────────────── */
+function showPatience() {
+  const msg = document.getElementById('patience-msg');
+  msg.classList.add('visible');
+  // Hide buttons so there's no nagging loop
+  const btns = document.querySelector('#scene2 .btn-group');
+  btns.style.opacity = '0';
+  btns.style.pointerEvents = 'none';
+  setTimeout(() => { btns.style.display = 'none'; }, reducedMotion ? 0 : 500);
+}
+
+/* ─────────────────────────────────────────────────
+   Scene 4: Selection
+   ───────────────────────────────────────────────── */
+function selectOption(el) {
+  document.querySelectorAll('.option-card').forEach(c => {
+    c.classList.remove('selected');
+    c.setAttribute('aria-checked', 'false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-checked', 'true');
+  chosenPlan = el.dataset.value;
+  checkScene4Ready();
+}
+
+function optionKey(e, el) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    selectOption(el);
+  }
+}
+
+function checkScene4Ready() {
+  const dateVal = document.getElementById('date-input').value;
+  chosenDate = dateVal;
+  const btn = document.getElementById('set-day-btn');
+  btn.disabled = !(chosenDate && chosenPlan);
+}
+
+/* ─────────────────────────────────────────────────
+   Scene 5: Confirmation
+   ───────────────────────────────────────────────── */
+function populateConfirmation() {
+  const d = new Date(chosenDate + 'T00:00:00');
+  const formatted = d.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+  document.getElementById('confirm-date').textContent = formatted;
+  document.getElementById('confirm-plan').textContent = chosenPlan;
+}
+
+/* ─────────────────────────────────────────────────
+   Modal
+   ───────────────────────────────────────────────── */
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.querySelector('.modal-card .close-btn').focus();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('envelope-btn').focus();
+}
+
+function clickOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function envelopeKey(e) {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ─────────────────────────────────────────────────
+   Ambient Particles (sparkles + hearts)
+   ───────────────────────────────────────────────── */
+(function initParticles() {
+  if (reducedMotion) return;
+
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  const particles = [];
+  const MAX = 35;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const types = ['✦', '♥', '✧', '❤', '✦'];
+
+  function spawn() {
+    if (particles.length >= MAX) return;
+    particles.push({
+      x: Math.random() * W,
+      y: H + 10,
+      size: 8 + Math.random() * 10,
+      speed: 0.3 + Math.random() * 0.6,
+      drift: (Math.random() - 0.5) * 0.3,
+      opacity: 0.08 + Math.random() * 0.12,
+      char: types[Math.floor(Math.random() * types.length)],
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 0.5
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.y -= p.speed;
+      p.x += p.drift;
+      p.rotation += p.rotSpeed;
+
+      if (p.y < -20) { particles.splice(i, 1); continue; }
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.globalAlpha = p.opacity;
+      ctx.font = p.size + 'px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Use rose/gold colors
+      ctx.fillStyle = p.char === '♥' || p.char === '❤'
+        ? getComputedStyle(document.documentElement).getPropertyValue('--rose-deep').trim()
+        : getComputedStyle(document.documentElement).getPropertyValue('--gold').trim();
+
+      ctx.fillText(p.char, 0, 0);
+      ctx.restore();
+    }
+
+    if (Math.random() < 0.08) spawn();
+
+    requestAnimationFrame(draw);
+  }
+
+  // Initial seed
+  for (let i = 0; i < 8; i++) {
+    spawn();
+    particles[particles.length - 1].y = Math.random() * H;
+  }
+
+  draw();
+})();
+
+/* ─────────────────────────────────────────────────
+   Confetti Burst (Scene 5)
+   ───────────────────────────────────────────────── */
+function launchConfetti() {
+  if (reducedMotion) return;
+
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = [];
+  const emojis = ['💛', '✨', '💕', '⭐', '🤍', '♥', '✦'];
+  const count = 45;
+
+  for (let i = 0; i < count; i++) {
+    pieces.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 100,
+      vx: (Math.random() - 0.5) * 6,
+      vy: -2 - Math.random() * 5,
+      gravity: 0.06 + Math.random() * 0.03,
+      size: 12 + Math.random() * 12,
+      char: emojis[Math.floor(Math.random() * emojis.length)],
+      opacity: 1,
+      fade: 0.006 + Math.random() * 0.008,
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 4
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+
+    for (const p of pieces) {
+      if (p.opacity <= 0) continue;
+      alive = true;
+
+      p.x += p.vx;
+      p.vy += p.gravity;
+      p.y += p.vy;
+      p.opacity -= p.fade;
+      p.rotation += p.rotSpeed;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation * Math.PI / 180);
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.font = p.size + 'px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(p.char, 0, 0);
+      ctx.restore();
+    }
+
+    if (alive) requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+/* ─────────────────────────────────────────────────
+   Set min date for date picker to today
+   ───────────────────────────────────────────────── */
+(function() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date-input').setAttribute('min', today);
+})();
+</script>
+</body>
+</html>
